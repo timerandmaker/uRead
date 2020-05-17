@@ -1,0 +1,26 @@
+.van-tabs__line{
+    background-color: #1989fa;
+}
+.van-tab--active {
+    transition: all 0.3s ease;
+    font-weight: bold;
+    font-size: 20px;
+    color: #fff;
+}
+.van-tab__text{
+    color: #fff;
+}
+.el-carousel__mask {
+    background-color: transparent !important;
+}
+.van-swipe__indicator{
+    background-color: #666 !important;
+}
+.van-swipe__indicator--active{
+    background-color: #1989FA !important;
+}
+.van-nav-bar__title {
+    color: #fff !important;
+    font-weight: bold;
+    font-size: 20px;
+}

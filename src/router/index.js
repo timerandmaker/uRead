@@ -13,9 +13,13 @@ const routes = [
       { path: '/selected', component: resolve => require(['../views/SelectedContainer.vue'], resolve) },
       { path: '/find', component: resolve => require(['../views/FindContainer.vue'], resolve) },
       { path: '/mine', component: resolve => require(['../views/MineContainer.vue'], resolve) }
-    ]
+    ],
+    meta: {
+      keepAlive: true
+    }
   },
-  { path: '/search', component: resolve => require(['../views/SearchContainer.vue'], resolve) }
+  { path: '/search', component: resolve => require(['../views/SearchContainer.vue'], resolve) },
+  { path: '/read', component: resolve => require(['../views/ReadContainer.vue'], resolve) }
 ]
 
 const router = new VueRouter({

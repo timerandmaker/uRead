@@ -17,47 +17,10 @@
           <h3>仙虞计</h3>
           <p>读到了的本书的某章节</p>
           <p>这里是作品简介</p>
-          <van-icon @click.stop="alertTag" name="ellipsis" size="26px" color="#9999a0" />
         </div>
       </div>
     </van-list>
-    <!-- 书籍设置弹出层 -->
-    <van-popup v-model="actionSheetShow" get-container="#app" position="bottom">
-      <!-- 详情 -->
-      <van-row>
-        <van-col span="5">
-          <img src="../../assets/images/testBook.jpg" alt />
-        </van-col>
-        <van-col span="15">
-          <h3>仙虞计</h3>
-          <p>读到了的本书的某章节</p>
-        </van-col>
-        <van-col span="4">
-          <van-button size="mini" plain hairline type="info">详情</van-button>
-        </van-col>
-      </van-row>
-      <!-- 操作 -->
-      <div style="margin-top: 10px;">
-        <van-grid :border="false" :column-num="4">
-          <van-grid-item>
-            <van-switch v-model="checked" size="20px" />
-            <p>置顶</p>
-          </van-grid-item>
-          <van-grid-item>
-            <van-icon size="40px" name="expand-o" />
-            <p>分享</p>
-          </van-grid-item>
-          <van-grid-item>
-            <van-icon size="40px" name="smile-comment-o" />
-            <p>书友圈</p>
-          </van-grid-item>
-          <van-grid-item>
-            <van-icon size="40px" name="delete" />
-            <p>删除</p>
-          </van-grid-item>
-        </van-grid>
-      </div>
-    </van-popup>
+    
   </div>
 </template>
 
@@ -67,9 +30,7 @@ export default {
     return {
       bslist: [],
       loading: false,
-      finished: false,
-      actionSheetShow: false,
-      checked: true
+      finished: false
     };
   },
   methods: {
@@ -84,9 +45,6 @@ export default {
       }, 300);
       //跳转至阅读页面
       this.$router.push('/read');
-    },
-    alertTag() {
-      this.actionSheetShow = true;
     }
   }
 };

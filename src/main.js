@@ -3,6 +3,8 @@ import App from './App.vue'
 import router from './router'
 import store from './store'
 import './plugins/vant.js'
+import './assets/global.css'
+import './plugins/element.js'
 
 Vue.config.productionTip = false
 
