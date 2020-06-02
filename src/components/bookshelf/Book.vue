@@ -33,7 +33,13 @@
           <p>读到了的本书的某章节</p>
         </van-col>
         <van-col span="4">
-          <van-button size="mini" plain hairline type="info">详情</van-button>
+          <van-button
+            @click="$router.push({path: '/detail', query: {bookid: selectedBookId}})"
+            size="mini"
+            plain
+            hairline
+            type="info"
+          >详情</van-button>
         </van-col>
       </van-row>
       <!-- 操作 -->
@@ -47,7 +53,7 @@
             <van-icon size="40px" name="expand-o" />
             <p>分享</p>
           </van-grid-item>
-          <van-grid-item>
+          <van-grid-item @click="$router.push('/bookteam')">
             <van-icon size="40px" name="smile-comment-o" />
             <p>书友圈</p>
           </van-grid-item>
@@ -65,11 +71,18 @@
 export default {
   data() {
     return {
+      // 书籍列表
       bslist: [],
+      // 加载状态
       loading: false,
+      // 是否结束
       finished: false,
+      // 显示操作弹窗
       actionSheetShow: false,
-      checked: true
+      // 置顶状态
+      checked: true,
+      // 选中的书籍id
+      selectedBookId: 0
     };
   },
   methods: {
@@ -81,9 +94,9 @@ export default {
       this.$refs.containerRef[i].style.backgroundColor = "#eee";
       setTimeout(() => {
         this.$refs.containerRef[i].style.backgroundColor = "";
-      }, 300);
-      //跳转至阅读页面
-      this.$router.push('/read');
+        //跳转至阅读页面
+        this.$router.push("/read");
+      }, 100);
     },
     alertTag() {
       this.actionSheetShow = true;

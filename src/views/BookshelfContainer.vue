@@ -34,20 +34,58 @@
 import Book from "../components/bookshelf/Book.vue";
 import Follow from "../components/bookshelf/Follow.vue";
 export default {
+  name: "bookshelf",
   data() {
     return {
       tabActionIndex: 0,
-      isLoading: false
+      isLoading: false,
+      scrollTop1: document.documentElement.scrollTop
     };
   },
   methods: {
+    // 记录滑动位置
+    setScrollTop() {
+      const MarginTop =
+        document.documentElement.scrollTop || document.body.scrollTop;
+      sessionStorage.setItem("bookshelf-marginTop", MarginTop);
+    },
+    // 获取上次滑动位置
+    getScrollTop() {
+      if (sessionStorage.getItem("bookshelf-marginTop")) {
+        window.scrollTo(
+          0,
+          parseInt(sessionStorage.getItem("bookshelf-marginTop"))
+        );
+      }
+    },
+    // 下拉刷新
     onRefresh() {
       this.isLoading = false;
+    }
+  },
+  watch: {
+    scrollTop1(new1, old1) {
+      console.log(new1, old1);
     }
   },
   components: {
     Book,
     Follow
+  },
+  beforeRouteEnter(to, from, next) {
+    // 进入时查看是否有记录位置
+    next(vm => vm.getScrollTop());
+  },
+  beforeRouteLeave(to, from, next) {
+    // 离开时记录位置
+    this.setScrollTop();
+    next();
+  },
+  mounted() {
+    window.addEventListener("beforeunload", this.setScrollTop);
+  },
+  destroyed() {
+    console.log("bookshelf组件被销毁");
   }
 };
 </script>

@@ -1,8 +1,8 @@
 <template>
   <div id="content">
-    <!-- <keep-alive> -->
-    <router-view></router-view>
-    <!-- </keep-alive> -->
+    <keep-alive exclude="mine">
+      <router-view></router-view>
+    </keep-alive>
     <!-- 底部tabbar导航栏 -->
     <van-tabbar v-model="active" :route="true">
       <van-tabbar-item to="/bookshelf" :icon="active==0?'column':'newspaper-o'">书架</van-tabbar-item>

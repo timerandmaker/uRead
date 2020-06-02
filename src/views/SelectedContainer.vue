@@ -2,7 +2,7 @@
   <div id="selected">
     <!-- 顶部搜索 -->
     <div class="search" @click="$router.push('/search')">
-      <img src="../assets/icons/search.png"/>
+      <img src="../assets/icons/search.png" />
     </div>
     <!-- 顶部导航 -->
     <van-tabs background="#1989fa" color="#fff" v-model="tabActive" animated swipeable sticky>
@@ -41,15 +41,15 @@ export default {
 <style lang="scss">
 #selected {
   padding-bottom: 50px;
-  .van-sticky{
+  .van-sticky {
     background-color: #1989fa;
   }
-  .search{
+  .search {
     position: fixed;
     right: 20px;
     top: 9px;
     z-index: 999;
-    img{
+    img {
       width: 26px;
       display: block;
     }

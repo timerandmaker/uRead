@@ -24,7 +24,13 @@ import {
     NoticeBar,
     Divider,
     Stepper,
-    Toast
+    Toast,
+    ShareSheet,
+    TreeSelect,
+    Overlay,
+    Field,
+    Form,
+    Checkbox
 } from 'vant'
 
 Vue.use(Button)
@@ -51,4 +57,10 @@ Vue.use(PullRefresh)
 Vue.use(NoticeBar)
 Vue.use(Divider)
 Vue.use(Stepper)
+Vue.use(ShareSheet)
+Vue.use(TreeSelect)
+Vue.use(Overlay)
+Vue.use(Field)
+Vue.use(Form)
+Vue.use(Checkbox)
 Vue.prototype.$toast = Toast;

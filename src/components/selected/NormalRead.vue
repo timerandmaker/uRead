@@ -8,11 +8,11 @@
     </van-swipe>
     <!-- 分类、排名导航 -->
     <div class="navbar">
-      <div class="type">
+      <div @click="$router.push('/classify')" class="type">
         <img src="../../assets/icons/type.png" alt />
         <p>分类</p>
       </div>
-      <div class="rank">
+      <div @click="$router.push('/rank')" class="rank">
         <img src="../../assets/icons/rank.png" alt />
         <p>排名</p>
       </div>
@@ -41,6 +41,9 @@ export default {
   ],
   components: {
     bookmin
+  },
+  destroyed(){
+    console.log('此组件被销毁了')
   }
 };
 </script>

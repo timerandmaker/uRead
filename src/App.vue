@@ -1,9 +1,7 @@
 <template>
   <div id="app">
     <transition>
-      <keep-alive>
-        <router-view></router-view>
-      </keep-alive>
+      <router-view></router-view>
     </transition>
   </div>
 </template>
@@ -35,7 +33,7 @@ export default {
                 plus.runtime.quit();
               }
             }
-          }else{
+          } else {
             // 返回上一级页面
             webview.back();
           }

@@ -1,28 +1,20 @@
 <template>
   <div>
-    <h1>搜索</h1>
-    <h1>搜索</h1>
-    <h1>搜索</h1>
-    <h1>搜索</h1>
-    <h1>搜索</h1>
-    <h1>搜索</h1>
-    <h1>搜索</h1>
-    <h1>搜索</h1>
-    <h1>搜索</h1>
-    <h1>搜索</h1>
-    <h1>搜索</h1>
+    <works></works>
   </div>
 </template>
 
 <script>
+import works from '@/components/search/WorksSearch.vue'
 export default {
-    data() {
-    return {
-      
-    };
+  data() {
+    return {};
+  },
+  components: {
+    works
   },
   mounted(){
-    
+    console.log(this.$store.state.cityID)
   }
 };
 </script>

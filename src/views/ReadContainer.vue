@@ -32,7 +32,7 @@
       position="top"
       :style="{ height: '50px' }"
     >
-      <van-icon @click="$router.push('/bookshelf')" class="no left" name="arrow-left" />
+      <van-icon @click="$router.back(-1)" class="no left" name="arrow-left" />
       <van-icon @click="showTopDialog" class="no right" name="ellipsis" />
     </van-popup>
     <!-- 上部小弹窗 -->
@@ -100,6 +100,23 @@
           <p class="no">{{pageCss.lineHeight}}</p>
           <img @click="subLineHeight" class="no" src="../assets/icons/subSize.png" alt="减" />
         </div>
+        <div class="no font-size">
+          <p class="no">自阅速度</p>
+          <img @click="addMsec" class="no" src="../assets/icons/addSize.png" alt="加" />
+          <p class="no">{{msec}}</p>
+          <img @click="subMsec" class="no" src="../assets/icons/subSize.png" alt="减" />
+        </div>
+        <div class="no back-color">
+          <div class="no" @click="changeBgColor('#FFFFFF')" style="background-color: #FFFFFF"></div>
+          <div class="no" @click="changeBgColor('#D8C6A2')" style="background-color: #D8C6A2"></div>
+          <div class="no" @click="changeBgColor('#FAF9DE')" style="background-color: #FAF9DE"></div>
+          <div class="no" @click="changeBgColor('#FFF2E2')" style="background-color: #FFF2E2"></div>
+          <div class="no" @click="changeBgColor('#FDE6E0')" style="background-color: #FDE6E0"></div>
+          <div class="no" @click="changeBgColor('#E3EDCD')" style="background-color: #E3EDCD"></div>
+          <div class="no" @click="changeBgColor('#DCE2F1')" style="background-color: #DCE2F1"></div>
+          <div class="no" @click="changeBgColor('#E9EBFE')" style="background-color: #E9EBFE"></div>
+          <div class="no" @click="changeBgColor('#EAEAEF')" style="background-color: #EAEAEF"></div>
+        </div>
       </div>
     </van-popup>
   </div>
@@ -125,7 +142,7 @@ export default {
       //滚动状态
       scrollStatus: false,
       //轮回毫秒数,数值越大滚动越慢
-      msec: 1,
+      msec: 0.5,
       //获取小说的数据
       txt: [
         {
@@ -145,10 +162,36 @@ export default {
       showTopBottom: false,
       // 显示上部小弹窗
       showTopLite: false,
+      // 过滤器，过滤内容
       filterArray: ["top-pop", "van-button", "left", "right", "no"]
     };
   },
   methods: {
+    // 增加阅读速度
+    addMsec() {
+      if (this.msec >= 2) {
+        this.$toast("再快看不见啦");
+      } else {
+        this.msec = parseFloat((this.msec + 0.1).toFixed(1));
+        localStorage.setItem("autoMsec", this.msec);
+      }
+    },
+    // 减少阅读速度
+    subMsec() {
+      if (this.msec <= 0.1) {
+        this.$toast("不能比蜗牛还慢");
+      } else {
+        this.msec = parseFloat((this.msec - 0.1).toFixed(1));
+        localStorage.setItem("autoMsec", this.msec);
+      }
+    },
+    // 改变背景颜色
+    changeBgColor(color) {
+      this.pageCss.backgroundColor = color;
+      this.pageCss.color = "#302303";
+      localStorage.setItem("backgroundColor", this.pageCss.backgroundColor);
+      localStorage.removeItem("nightMode");
+    },
     // 增加字体大小，默认最大35
     addFontSize() {
       if (this.pageCss.fontSzie == 35) {
@@ -188,19 +231,30 @@ export default {
     // 设置
     setUp() {
       if (this.pageCss.bottomHeight == 50) {
-        this.pageCss.bottomHeight = 200;
+        this.pageCss.bottomHeight = 250;
       } else {
         this.pageCss.bottomHeight = 50;
       }
     },
     // 修改模式
     changeMode() {
-      if (this.pageCss.backgroundColor == "#D8C6A2") {
+      if (this.pageCss.color != "#666") {
+        // 开启夜间模式
         this.pageCss.backgroundColor = "#0c0c0c";
         this.pageCss.color = "#666";
+        localStorage.setItem("nightMode", "true");
       } else {
-        this.pageCss.backgroundColor = "#D8C6A2";
+        // 返回正常模式
+        if (localStorage.getItem("backgroundColor")) {
+          this.pageCss.backgroundColor = localStorage.getItem(
+            "backgroundColor"
+          );
+        } else {
+          this.pageCss.backgroundColor = "#D8C6A2";
+        }
         this.pageCss.color = "#302303";
+        // 删除夜间模式
+        localStorage.removeItem("nightMode");
       }
     },
     //初始化页面
@@ -211,11 +265,21 @@ export default {
       this.screenWH.pageHeight =
         document.documentElement.scrollHeight || document.body.scrollHeight;
       // 检测是否有自定义设置
-      if(localStorage.getItem('fontSize')){
-        this.pageCss.fontSzie = parseInt(localStorage.getItem('fontSize'))
+      if (localStorage.getItem("fontSize")) {
+        this.pageCss.fontSzie = parseInt(localStorage.getItem("fontSize"));
       }
-      if(localStorage.getItem('lineHeight')){
-        this.pageCss.lineHeight = parseInt(localStorage.getItem('lineHeight'));
+      if (localStorage.getItem("lineHeight")) {
+        this.pageCss.lineHeight = parseInt(localStorage.getItem("lineHeight"));
+      }
+      if (localStorage.getItem("autoMsec")) {
+        this.msec = parseFloat(localStorage.getItem("autoMsec"));
+      }
+      if (localStorage.getItem("backgroundColor")) {
+        this.pageCss.backgroundColor = localStorage.getItem("backgroundColor");
+      }
+      if (localStorage.getItem("nightMode")) {
+        this.pageCss.backgroundColor = "#0c0c0c";
+        this.pageCss.color = "#666";
       }
     },
     //**********页面操作导航**********
@@ -278,7 +342,7 @@ export default {
       let timer = setInterval(() => {
         // 当小于且状态为true，执行动画
         if (init < allDistance && this.scrollStatus == true) {
-          init += 1;
+          init += msec;
           window.scrollTo(0, init);
         } else {
           // 如果距上小于真实页面高度，则说明状态为false，则暂停动画
@@ -294,37 +358,36 @@ export default {
             allDistance -= this.screenWH.height;
           }
         }
-      }, msec);
+      }, 1);
     },
     // 监听滑动手势
     listenTouch() {
-      document.addEventListener("touchmove", () => {
-        //关闭自动滚动
-        this.scrollStatus = false;
-        // 关闭上下弹框
-        this.showTopBottom = false;
-        // 重置底部弹框高度
-        this.pageCss.bottomHeight = 50;
-      });
+      document
+        .getElementById("read-container")
+        .addEventListener("touchmove", () => {
+          //关闭自动滚动
+          this.scrollStatus = false;
+          // 关闭上下弹框
+          this.showTopBottom = false;
+          // 关闭上部小弹窗
+          this.showTopLite = false;
+          // 重置底部弹框高度
+          this.pageCss.bottomHeight = 50;
+        });
     },
     // 监听滚动事件
     listenScroll() {
-      document.addEventListener("scroll", () => {
-        // 滑动到底部，加载新内容
-        let init =
-          document.documentElement.scrollTop || document.body.scrollTop;
-        let pageHeight = (this.screenWH.pageHeight =
-          document.documentElement.scrollHeight || document.body.scrollHeight);
-        if (Math.ceil(init) + 50 >= pageHeight - this.screenWH.height) {
-          this.loadNewData();
-          console.log("进行了一次滑动加载");
-        }
-      });
+      document.addEventListener("scroll", this.loadNewData);
     },
     // 加载新数据
     loadNewData() {
-      this.txt.push({
-        content: `<h2>这是第二章的标题</h2>
+      // 滑动到底部，加载新内容
+      let init = document.documentElement.scrollTop || document.body.scrollTop;
+      let pageHeight = (this.screenWH.pageHeight =
+        document.documentElement.scrollHeight || document.body.scrollHeight);
+      if (Math.ceil(init) + 50 >= pageHeight - this.screenWH.height) {
+        this.txt.push({
+          content: `<h2>这是第二章的标题</h2>
       <p>1阿睡得好睡得好阿睡得好阿睡得好睡得好阿睡得好睡得好阿睡得好阿睡得好睡得好阿睡得好睡得好阿睡得好阿睡得好睡得好阿睡得好睡得好阿睡得好阿睡得好睡得好阿睡得好睡得好阿睡得好阿睡得好睡得好</p>
       <p>2阿睡得好睡得好阿睡得好阿睡得好睡得好阿睡得好睡得好阿睡得好阿睡得好睡得好阿睡得好睡得好阿睡得好阿睡得好睡得好阿睡得好睡得好阿睡得好阿睡得好睡得好阿睡得好睡得好阿睡得好阿睡得好睡得好</p>
       <p>3阿睡得好睡得好阿睡得好阿睡得好睡得好阿睡得好睡得好阿睡得好阿睡得好睡得好阿睡得好睡得好阿睡得好阿睡得好睡得好阿睡得好睡得好阿睡得好阿睡得好睡得好阿睡得好睡得好阿睡得好阿睡得好睡得好</p>
@@ -334,12 +397,19 @@ export default {
       <p>7阿睡得好睡得好阿睡得好阿睡得好睡得好阿睡得好睡得好阿睡得好阿睡得好睡得好阿睡得好睡得好阿睡得好阿睡得好睡得好阿睡得好睡得好阿睡得好阿睡得好睡得好阿睡得好睡得好阿睡得好阿睡得好睡得好</p>
       <p>8阿睡得好睡得好阿睡得好阿睡得好睡得好阿睡得好睡得好阿睡得好阿睡得好睡得好阿睡得好睡得好阿睡得好阿睡得好睡得好阿睡得好睡得好阿睡得好阿睡得好睡得好阿睡得好睡得好阿睡得好阿睡得好睡得好</p>
       <p>9阿睡得好睡得好阿睡得好阿睡得好睡得好阿睡得好睡得好阿睡得好阿睡得好睡得好阿睡得好睡得好阿睡得好阿睡得好睡得好阿睡得好睡得好阿睡得好阿睡得好睡得好阿睡得好睡得好阿睡得好阿睡得好睡得好</p>`
-      });
+        });
+        console.log("进行了一次加载");
+      }
     },
     // 上部小窗口
     showTopDialog() {
       this.showTopLite = !this.showTopLite;
     }
+  },
+  beforeRouteLeave(to, from, next) {
+    this.scrollStatus = false;
+    document.removeEventListener("scroll", this.loadNewData);
+    next();
   },
   created() {},
   mounted() {
@@ -476,6 +546,15 @@ html {
       img:active {
         height: 35px;
         width: 35px;
+      }
+    }
+    .back-color {
+      display: flex;
+      padding-top: 5px;
+      div {
+        height: 40px;
+        width: 80px;
+        border-radius: 5px;
       }
     }
   }

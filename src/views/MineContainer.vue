@@ -124,6 +124,7 @@
 
 <script>
 export default {
+  name: "mine",
   data() {
     return {
       isPullDown: false
@@ -133,6 +134,9 @@ export default {
     pullDown() {
       this.isPullDown = false;
     }
+  },
+  destroyed() {
+    console.log("mine组件被销毁");
   }
 };
 </script>
