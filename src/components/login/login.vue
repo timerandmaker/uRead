@@ -95,7 +95,7 @@ export default {
           localStorage.setItem("token", res.res.token);
           localStorage.setItem("userinfo", JSON.stringify(res.res.userinfo));
           // 跳转到书架
-          this.$router.push("/bookshelf");
+          this.$router.replace("/bookshelf");
         }
       }
     },
